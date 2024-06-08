@@ -21,6 +21,17 @@ export const IMAGES_PATH = resolve('../../dist');
 
 export const AUTO_CLOSE_TIMESTAMPS = 60000;  // 自动关闭测试客户端时间
 
+export const CHROME_START = {
+  executablePath: '/usr/bin/google-chrome'
+}
+
+export const CHROME_FLAGS = [
+  '--no-sandbox',
+  '--disable-setuid-sandbox',
+  '--remote-debugging-port=8020',  
+  '--remote-debugging-address=0.0.0.0'
+]
+
 export const initPath = (path) => {
   fs.exists(path, async (exists) => {
     if (!exists) {

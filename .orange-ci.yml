@@ -1,0 +1,105 @@
+# 公共配置
+.common: &common
+  name: 精卫 Launcher $ENV_FILE
+  services:
+    - docker-with-cache # 复用 Layer cache
+  runner:
+    network: default
+  wework:
+    title: 精卫 Launcher  $ENV_FILE
+    notify:
+      - waynegong
+      - shiningding
+      - $ORANGE_BUILD_USER
+  imports: 
+    - https://git.woa.com/docker-image/ci-env/blob/master/docker-env
+    - https://git.woa.com/waynegong/env/blob/master/envs
+
+# 生成环境变量
+.make-envs: &make-envs
+  - name: 安装 dotenv
+    script: npm install dotenv
+
+  - name: 生成环境变量
+    script: node src/bin/exportEnvs.js
+    exports:
+      stdout: ENVS
+
+# 构建镜像
+.build-img: &build-img
+  - name: 构建镜像 $IMG_PATH:$IMG_TAG
+    script: docker build -t $IMG_PATH:$IMG_TAG .
+
+
+# 推送镜像
+.push-img: &push-img
+  - name: 登录 Docker（$DOCKER_USERNAME）
+    script: docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} $REGISTRY
+
+  - name: 推送镜像
+    script: docker push $IMG_PATH --all-tags
+
+
+# 部署镜像
+.deploy: &deploy
+  - name: 触发运维平台自动部署
+    image: mirrors.tencent.com/qqmusic_web/create-mtke-env
+    settings:
+      project: $PROJECT
+      image: $PROJECT/$IMG
+      tag: $IMG_TAG
+      description: 精卫 Launcher
+      port: 80
+      branch: master
+      commit: $ORANGE_COMMIT
+      user: $ORANGE_BUILD_USER
+      gray_release: true
+      replicas: 1
+      region: 深圳
+      other_images: '["l5","dc_agent"]'
+      source_limit: 2
+      token: v249cI789m0839PSBtV1yDp1Gw9G9h4w
+      discard: 3
+      access_check: 1
+      delete_deployment_type: 2
+      envs: $ENVS
+
+
+# 构建 & 部署测试环境
+dev:
+  push:
+    - 
+      env:
+        REGISTRY: docker-images.woa.com
+        PROJECT: jingwei # 哈勃项目名
+        IMG: jingwei-launcher # 镜像名
+        IMG_PATH: $REGISTRY/$PROJECT/$IMG # 完整镜像名（pull）
+        IMG_TAG: $ORANGE_COMMIT_SHORT # 镜像标签
+        ENV_FILE: .env.test
+      <<: *common
+
+      stages:
+        - *make-envs
+        - *build-img
+        - *push-img
+        - *deploy
+
+
+# 构建 & 部署生产环境
+$:
+  tag_push:
+    -
+      env:
+        REGISTRY: docker-images.woa.com
+        PROJECT: jingwei # 哈勃项目名
+        IMG: jingwei-launcher-prod # 镜像名
+        IMG_PATH: $REGISTRY/$PROJECT/$IMG # 完整镜像名（pull）
+        IMG_TAG: $ORANGE_COMMIT_SHORT # 镜像标签
+        ENV_FILE: .env.prod
+      <<: *common
+
+      stages:
+        - *make-envs
+        - *build-img
+        - *push-img
+        - *deploy

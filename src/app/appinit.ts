@@ -7,7 +7,7 @@ import { MainProps } from '../typings/global';
 const startApp = async (props: MainProps) => {
   const client = new MyAppBridge({
     homeURL: 'https://www.xiaohongshu.com/explore',
-    debugPort: 'http://192.168.1.2:9222'
+    // debugPort: 'http://192.168.1.2:9222'
   });
   try {
     await client.startPage();

@@ -2,7 +2,7 @@
  * @Author: shiningding <shiningding@tencent.com>
  * @Date: 2021-04-20 11:34:33
  * @--------------------------------------------------:
- * @LastEditTime: 2024-04-02 16:35:34
+ * @LastEditTime: 2024-06-26 14:40:02
  * @Modified By: shiningding <shiningding@tencent.com>
  * @---------------------------------------------------:
  * @Description:  一些配置项目
@@ -22,14 +22,16 @@ export const IMAGES_PATH = resolve('../../dist');
 export const AUTO_CLOSE_TIMESTAMPS = 60000;  // 自动关闭测试客户端时间
 
 export const CHROME_START = {
-  executablePath: '/usr/bin/google-chrome'
+  headless: !IS_MACOS,
+  executablePath: IS_MACOS ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : '/usr/bin/google-chrome'
 }
 
 export const CHROME_FLAGS = [
   '--no-sandbox',
   '--disable-setuid-sandbox',
-  '--remote-debugging-port=8020',  
-  '--remote-debugging-address=0.0.0.0'
+  '--proxy-server=127.0.0.1:8090'
+  // '--remote-debugging-port=8020',  
+  // '--remote-debugging-address=0.0.0.0'
 ]
 
 export const initPath = (path) => {

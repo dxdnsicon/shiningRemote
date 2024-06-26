@@ -1,6 +1,4 @@
-import puppeteer from 'puppeteer-core';
-import { CHROME_START, CHROME_FLAGS } from '../config/task-config'
-
+import initPage from '../browser/page';
 class App {
     homeURL: '';
     debugPort: '';
@@ -9,31 +7,9 @@ class App {
         this.debugPort = props.debugPort;
     }
     public async startPage(){
-        const browser = false ? await puppeteer.connect({
-            ...CHROME_START,
-            browserURL: this.debugPort,
-        }) : await puppeteer.launch({ ...CHROME_START, headless: true, args: CHROME_FLAGS });
+        const cookies = `gid.sign=422GQ6FGOrifk1B9vgITklY0bEc=; abRequestId=2284730d7798677abe7fec1aa913f69f; xsecappid=xhs-pc-web; acw_tc=114c5afe5f0b1adf5cbb64666048e338b25d7298974a0f9f48c101ebf81a3a77; webBuild=4.22.4; a1=190534289b4ovl15xeev25nw3hmh6u79v3jryuyij30000254075; webId=75d67b39c18675af6702a910ef025c3b; websectiga=8886be45f388a1ee7bf611a69f3e174cae48f1ea02c0f8ec3256031b8be9c7ee; sec_poison_id=1df2cdf7-22cc-4f8b-92c1-35fc746aa7bf; gid=yj82q4JYd8hiyj82q4JYjq7vD4lh1y2CddhJV3V2IEqx6Fq8xK7Wjv888J248W2822ji400W; web_session=0400698ca709d4563c4f7bff4e344b3f2a0362; unread={%22ub%22:%226658158a0000000015009b88%22%2C%22ue%22:%22666c07f10000000006004fb2%22%2C%22uc%22:29}`
 
-        const page = await browser.newPage();
-
-        const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36';
-        await page.setUserAgent(userAgent);
-
-        const cookieString = 'abRequestId=e7f36198-67b4-56d7-8970-8947a7850c65; a1=18f23593a100vn9e3pdhqvmnmvbpe9np3suctw3iy50000353532; webId=a7da130a7bcd3dac41c0b4e16391c3d5; gid=yYiJq2j4YSqfyYiJq2jq0MEqy88hIjdqUfxA73vh6I6hDS28UdjIU9888q2q2qJ8248ySj8D; web_session=0400698ca709d4563c4f0a4951344b3285cf19; websectiga=f47eda31ec99545da40c2f731f0630efd2b0959e1dd10d5fedac3dce0bd1e04d; acw_tc=7a588498098a1d1633b47303190fdf55a0dd2af1fd94c3b72c217950677879ba; webBuild=4.20.1; xsecappid=xhs-pc-web; sec_poison_id=d241493b-7d29-429d-a9df-dc1c574a96b7; unread={%22ub%22:%2264250190000000001203fb2e%22%2C%22ue%22:%2264bcfcb2000000000a018270%22%2C%22uc%22:18}';
-
-        // Parse the cookie string
-        const parsedCookies = cookieString.split(';').map(cookie => {
-            const [name, value] = cookie.split('=');
-            return {
-                name: name.trim(),
-                value: value.trim(),
-                domain: '.xiaohongshu.com', // Adjust the domain as needed
-                path: '/'
-            };
-        });
-    
-        // Set cookies
-        await page.setCookie(...parsedCookies);
+        const page = await initPage(cookies);
 
         await page.goto('https://xiaohongshu.com');
 

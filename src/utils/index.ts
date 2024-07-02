@@ -3,7 +3,7 @@ import { join } from 'path';
 import { exec } from 'child_process';
 import log from './log';
 import crypto from 'crypto';
-import { IS_MACOS } from '../config/task-config';
+import net from 'net'
 
 export const writeFile = (dir, fileName, content) => {
   if (!fs.existsSync(dir)) {
@@ -89,5 +89,20 @@ export const sleep = async (time: number) => {
     setTimeout(() => {
       resolve(true)
     }, time)
+  })
+}
+
+export const getPort = (): Promise<number> => {
+  const srv = net.createServer((sock) => sock.end('I need a port'));
+
+  return new Promise((resolve, reject) => {
+      srv.listen(0, () => {
+          // @ts-ignore
+          const port = srv.address().port as number;
+          srv.close((err) => {
+              if (err) return reject(err)
+              resolve(port as number)
+          })
+      });
   })
 }

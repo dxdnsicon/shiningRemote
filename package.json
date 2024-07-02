@@ -36,7 +36,9 @@
     "md5-node": "^1.0.1",
     "mysql2": "^2.3.3",
     "opn": "^6.0.0",
-    "puppeteer-core": "10.2.0"
+    "puppeteer-core": "10.2.0",
+    "whistle": "2.9.1",
+    "kill-port": "^2.0.1"
   },
   "devDependencies": {
     "@babel/cli": "7.7.0",

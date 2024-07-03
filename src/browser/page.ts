@@ -1,8 +1,19 @@
 import puppeteer from 'puppeteer-core';
 import { CHROME_START, CHROME_FLAGS } from '../config/task-config'
+import Whistle from '../utils/whistle';
+
+export const getProxyFlagStr = (port: number, ip = '127.0.0.1') => `--proxy-server=${ip}:${port}`
 
 export default async (cookie: string) => {
-  const browser = await puppeteer.launch({ ...CHROME_START, args: CHROME_FLAGS });
+
+  const w2 = await new Whistle().start();
+  w2.setRules(`# proxyID:  '# no proxy content`)
+
+  const flags = CHROME_FLAGS;
+
+  flags.push(getProxyFlagStr(w2.options.port))
+
+  const browser = await puppeteer.launch({ ...CHROME_START, args: flags });
 
   const page = await browser.newPage();
 

@@ -14,15 +14,7 @@ program
   .command("instance")
   .action(async () => {
     await startApp({
-      picDir: '/data/www/AdRobot/dist',
-      content: '测试文案',
-      task: 'publish',
-      account: [
-        {
-          account: '13148716794',
-          password: '19930505'
-        }
-      ]
+      keyword: '信用卡'
     });
   });
 program.parse(process.argv);

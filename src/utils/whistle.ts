@@ -93,13 +93,6 @@ export default class Whistle {
 
     setRules(val) {
         logger.debug(`process ${process.pid} whistle ${this.options.port} set rules: ${val}`)
-        val += `
-        /y.qq.com/lib/commercial/h5/music-(.*).js/ resReplace://{replace.js} # 防止yqq页面重定向
-        \`\`\`replace.js
-        window.location.href="https://music.qq.com/unilink/download.html: window.jingweitest="https://music.qq.com/unilink/download.html
-        /[a-z]="https://music.qq.com/unilink/download.html/:  window.jingweitest="https://music.qq.com/unilink/download.html
-        \`\`\`
-        `
         return this.rules.setDefault(val)
     }
 

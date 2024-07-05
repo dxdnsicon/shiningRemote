@@ -21,8 +21,8 @@ export default async (cookie: string) => {
   await page.setUserAgent(userAgent);
 
   await page.setViewport({
-    width: 1920,
-    height: 1080,
+    width: 1280,
+    height: 800,
   });
 
   const cookieString = cookie;

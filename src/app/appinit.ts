@@ -11,7 +11,8 @@ const startApp = async (props: MainProps) => {
   });
   try {
     await client.startPage();
-    await client.mainTask();
+    await client.main();
+    console.log('client process', client.process)
     return client;
   } catch(e) {
     console.error('error:', e?.toString?.())

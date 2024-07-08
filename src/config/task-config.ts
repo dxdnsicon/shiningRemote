@@ -2,7 +2,7 @@
  * @Author: shiningding <shiningding@tencent.com>
  * @Date: 2021-04-20 11:34:33
  * @--------------------------------------------------:
- * @LastEditTime: 2024-07-01 17:22:00
+ * @LastEditTime: 2024-07-08 19:36:51
  * @Modified By: shiningding <shiningding@tencent.com>
  * @---------------------------------------------------:
  * @Description:  一些配置项目
@@ -28,6 +28,8 @@ export const CHROME_START = {
   headless: !IS_MACOS,
   executablePath: IS_MACOS ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : '/usr/bin/google-chrome'
 }
+
+export const HOME_DOMAIN = `https://www.xiaohongshu.com`;
 
 export const CHROME_FLAGS = [
   '--no-sandbox',
